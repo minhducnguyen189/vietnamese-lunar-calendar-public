@@ -66,7 +66,7 @@ a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color
     </section>
     <section>
       <h2 style="font-family:Lora,serif;font-weight:700;font-size:23px;margin:0">6. Liên hệ</h2>
-      <p style="font-size:15.5px;line-height:1.75;color:var(--mut2);margin:12px 0 0;text-wrap:pretty">Mọi câu hỏi về quyền riêng tư, vui lòng gửi về <a href="mailto:minhducnguyen189@gmail.com" style="font-weight:700">minhducnguyen189@gmail.com</a>.</p>
+      <p style="font-size:15.5px;line-height:1.75;color:var(--mut2);margin:12px 0 0;text-wrap:pretty">Mọi câu hỏi về quyền riêng tư, vui lòng <a href="#" onClick="{{ contactEmail }}" style="font-weight:700;cursor:pointer">gửi email cho chúng tôi</a>.</p>
     </section>
   </div>
 </main>
@@ -95,6 +95,11 @@ class Component extends DCLogic {
         document.body.classList.toggle('dark', d);
         try { localStorage.setItem('alvn-theme', d ? 'dark' : 'light'); } catch (e) {}
         this.setState({dark: d});
+      },
+      contactEmail: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const u = ['minhducnguyen189', 'gmail.com'];
+        window.location.href = 'mail' + 'to:' + u[0] + '@' + u[1];
       }
     };
   }
