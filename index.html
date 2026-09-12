@@ -28,7 +28,13 @@
 <style>html{scroll-behavior:smooth}
 body{margin:0;--bg:#FBF6EE;--bgAlt:#F6EFE3;--ink:#251A12;--mut:#6E5F51;--mut2:#5E4F41;--line:#EADDC9;--chipBg:#F3E7D3;--chipBd:#E4D2B4;--acc:#8C1A12;--pri:#B3261E;--ghost:#D9BC8C;--gold:#B98A2F;--hdrBg:rgba(251,246,238,.88);--btnBg:#251A12;--btnCol:#FFFFFF;--cardBg:#FFFDF8;background:var(--bg);color:var(--ink);font-family:'Be Vietnam Pro',system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
 body.dark{--bg:#17120E;--bgAlt:#1E1813;--ink:#F1E8DC;--mut:#B5A695;--mut2:#C9B9A6;--line:#3A2F25;--chipBg:#2A211A;--chipBd:#463828;--acc:#FFB4AB;--pri:#FF5449;--ghost:#57462F;--gold:#F2C879;--hdrBg:rgba(23,18,14,.86);--btnBg:#F1E8DC;--btnCol:#241B14;--cardBg:#221B15}
-a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color:#fff}</style></helmet>
+a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color:#fff}
+.tabbar{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:4px;background:var(--chipBg);border:1px solid var(--chipBd);border-radius:999px;padding:5px}
+.tab{border:0;border-radius:999px;padding:9px 17px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;white-space:nowrap;background:transparent;color:var(--mut2);transition:background .2s,color .2s}
+.tab:hover{color:var(--acc)}
+.tab[aria-selected="true"]{background:var(--pri);color:#fff}
+.tab[aria-selected="true"]:hover{color:#fff}
+.tab:focus-visible{outline:2px solid var(--pri);outline-offset:2px}</style></helmet>
 <div data-screen-label="Trang chủ">
 <header style="position:sticky;top:0;z-index:50;background:var(--hdrBg);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)">
   <div style="max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
@@ -165,19 +171,20 @@ a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color
     <h2 style="font-family:Lora,serif;font-size:clamp(30px,4.5vw,42px);font-weight:700;line-height:1.15;margin:14px 0 0;color:var(--ink)">Màn hình rộng thì<br>bày ra cho đủ</h2>
     <p style="font-size:16px;color:var(--mut);line-height:1.6;margin:12px 0 0;text-wrap:pretty">Xoay ngang điện thoại hay mở trên máy tính bảng, thanh điều hướng chuyển sang cạnh trái và nội dung tách làm hai cột — lịch bên này, chi tiết ngày và giờ tốt bên kia. Không còn phải cuộn lên cuộn xuống.</p>
   </div>
-  <div data-reveal="" style="position:relative;margin-top:36px">
-    <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70%;height:150%;border-radius:50%;background:radial-gradient(ellipse, rgba(179,38,30,.12) 0%, transparent 70%);pointer-events:none"></div>
-    <img loading="lazy" decoding="async" width="1200" height="570" src="assets/ngang-lich.webp" alt="Màn hình Lịch khi xoay ngang: thanh điều hướng bên trái, lưới tháng ở giữa và thẻ chi tiết ngày kèm giờ tốt bên phải" style="position:relative;display:block;width:100%;height:auto;filter:drop-shadow(0 26px 44px rgba(80,30,10,.3))">
+  <div data-reveal="" style="margin-top:34px;display:flex;justify-content:center">
+    <div class="tabbar" role="tablist">
+      <sc-for list="{{ landTabs }}" as="t" hint-placeholder-count="5">
+        <button class="tab" type="button" role="tab" aria-selected="{{ t.selected }}" onClick="{{ t.select }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
   </div>
-  <div data-reveal="" style="display:flex;gap:18px;margin-top:26px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;align-items:flex-start">
-    <sc-for list="{{ landscapeShots }}" as="l" hint-placeholder-count="4">
-      <figure style="margin:0;flex:0 0 clamp(260px,38vw,400px);scroll-snap-align:start">
-        <img loading="lazy" decoding="async" width="1200" height="570" src="assets/{{ l.src }}" alt="{{ l.alt }}" style="display:block;width:100%;height:auto;border-radius:10px;filter:drop-shadow(0 14px 24px rgba(80,30,10,.22))">
-        <figcaption style="font-size:13px;font-weight:700;color:var(--mut2);margin-top:10px;display:flex;align-items:center;gap:7px"><span style="font-family:'Material Symbols Outlined';font-size:15px;line-height:1;color:var(--acc)">{{ l.i }}</span>{{ l.t }}</figcaption>
-      </figure>
-    </sc-for>
-  </div>
-  <p style="font-size:12.5px;color:var(--mut);opacity:.8;margin:4px 0 0">Vuốt ngang để xem thêm →</p>
+  <figure data-reveal="" style="margin:26px 0 0">
+    <div style="position:relative;background:var(--cardBg);border:1px solid var(--line);border-radius:24px;padding:clamp(14px,2.6vw,28px);overflow:hidden">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80%;height:150%;border-radius:50%;background:radial-gradient(ellipse, rgba(179,38,30,.10) 0%, transparent 70%);pointer-events:none"></div>
+      <img decoding="async" width="1200" height="570" src="assets/{{ landShotSrc }}" alt="{{ landShotAlt }}" style="position:relative;display:block;width:100%;height:auto;border-radius:12px;filter:drop-shadow(0 22px 38px rgba(80,30,10,.26))">
+    </div>
+    <figcaption style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:14.5px;font-weight:600;color:var(--mut2);text-align:center;text-wrap:pretty"><span style="font-family:'Material Symbols Outlined';font-size:17px;line-height:1;color:var(--acc)">{{ landShotIcon }}</span>{{ landShotCaption }}</figcaption>
+  </figure>
 </section>
 
 <section id="pro" data-screen-label="Lịch Việt Pro" style="scroll-margin-top:78px;background:var(--bgAlt);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:56px">
@@ -214,15 +221,20 @@ a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color
       </div>
     </div>
 
-    <div data-reveal="" style="display:flex;gap:22px;margin-top:44px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory;align-items:flex-start">
-      <sc-for list="{{ proShots }}" as="p" hint-placeholder-count="5">
-        <figure style="margin:0;flex:0 0 clamp(190px,26vw,240px);scroll-snap-align:start">
-          <img loading="lazy" decoding="async" width="800" height="1683" src="assets/{{ p.src }}" alt="{{ p.alt }}" style="display:block;width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(80,30,10,.28))">
-          <figcaption style="font-size:13px;font-weight:700;color:var(--mut2);margin-top:12px;display:flex;align-items:center;gap:7px"><span style="font-family:'Material Symbols Outlined';font-size:15px;line-height:1;color:var(--acc)">{{ p.i }}</span>{{ p.t }}</figcaption>
-        </figure>
+  <div data-reveal="" style="margin-top:34px;display:flex;justify-content:center">
+    <div class="tabbar" role="tablist">
+      <sc-for list="{{ proTabs }}" as="t" hint-placeholder-count="5">
+        <button class="tab" type="button" role="tab" aria-selected="{{ t.selected }}" onClick="{{ t.select }}">{{ t.label }}</button>
       </sc-for>
     </div>
-    <p style="font-size:12.5px;color:var(--mut);opacity:.8;margin:4px 0 0">Vuốt ngang để xem thêm →</p>
+  </div>
+    <figure data-reveal="" style="margin:26px 0 0">
+      <div style="position:relative;background:var(--cardBg);border:1px solid var(--line);border-radius:24px;padding:clamp(14px,2.6vw,28px);overflow:hidden;max-width:540px;margin:0 auto">
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80%;height:150%;border-radius:50%;background:radial-gradient(ellipse, rgba(179,38,30,.10) 0%, transparent 70%);pointer-events:none"></div>
+        <img decoding="async" width="800" height="1683" src="assets/{{ proShotSrc }}" alt="{{ proShotAlt }}" style="position:relative;display:block;margin:0 auto;width:auto;max-width:100%;max-height:clamp(400px,56vh,580px);height:auto;filter:drop-shadow(0 22px 38px rgba(80,30,10,.26))">
+      </div>
+    <figcaption style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:14.5px;font-weight:600;color:var(--mut2);text-align:center;text-wrap:pretty"><span style="font-family:'Material Symbols Outlined';font-size:17px;line-height:1;color:var(--acc)">{{ proShotIcon }}</span>{{ proShotCaption }}</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -347,7 +359,43 @@ a{color:var(--acc)}a:hover{color:var(--pri)}::selection{background:#B3261E;color
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;playUrl&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;#&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Liên kết&quot;}, &quot;showQr&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Khối CTA&quot;}}">
 class Component extends DCLogic {
-  state = {dark: false};
+  state = {dark: false, landTab: 0, proTab: 0};
+
+  landShots = [
+    {src: 'ngang-lich.webp', label: 'Lịch', i: 'calendar_month',
+     t: 'Lưới tháng ở giữa, chi tiết ngày và giờ tốt bên phải',
+     alt: 'Màn hình Lịch khi xoay ngang: thanh điều hướng bên trái, lưới tháng ở giữa và thẻ chi tiết ngày kèm giờ tốt bên phải'},
+    {src: 'ngang-doi-ngay.webp', label: 'Đổi ngày', i: 'swap_vert',
+     t: 'Bánh xe chọn ngày và kết quả nằm cạnh nhau',
+     alt: 'Màn hình Đổi ngày khi xoay ngang: bánh xe chọn ngày bên trái, kết quả âm lịch bên phải'},
+    {src: 'ngang-gio.webp', label: 'Giờ', i: 'schedule',
+     t: 'Cả 12 giờ Can Chi hiện trong một khung, không phải cuộn',
+     alt: 'Màn hình Giờ khi xoay ngang: dải 12 giờ Can Chi và danh sách giờ chia ba cột'},
+    {src: 'ngang-su-kien.webp', label: 'Sự kiện', i: 'celebration',
+     t: 'Danh sách ngày lễ và chi tiết sự kiện song song',
+     alt: 'Màn hình Sự kiện khi xoay ngang: danh sách ngày lễ bên trái, chi tiết sự kiện bên phải'},
+    {src: 'ngang-cai-dat.webp', label: 'Cài đặt', i: 'tune',
+     t: 'Mục lục cài đặt bên trái, tuỳ chọn bên phải',
+     alt: 'Màn hình Cài đặt khi xoay ngang: danh mục cài đặt bên trái, tuỳ chọn giao diện bên phải'}
+  ];
+
+  proShots = [
+    {src: 'widget-man-hinh-chinh.webp', label: 'Widget', i: 'widgets',
+     t: 'Giờ hoàng đạo và sự kiện sắp tới ngay trên màn hình chính',
+     alt: 'Màn hình chính điện thoại với tiện ích giờ hoàng đạo và tiện ích sự kiện sắp tới'},
+    {src: 'widget-chon.webp', label: 'Chọn tiện ích', i: 'dashboard_customize',
+     t: 'Bốn kiểu tiện ích để đưa ra màn hình chính',
+     alt: 'Màn hình Chọn tiện ích: bốn mẫu widget ngày âm lịch, giờ hoàng đạo và giờ tốt kế tiếp'},
+    {src: 'cai-dat-pro.webp', label: 'Chủ đề màu', i: 'palette',
+     t: '18 chủ đề màu và năm kiểu lưới lịch',
+     alt: 'Màn hình Cài đặt: huy hiệu Lịch Việt Pro, năm kiểu lưới lịch và bảng 18 chủ đề màu'},
+    {src: 'cai-dat-nhac-nho.webp', label: 'Nhắc nhở', i: 'notifications_active',
+     t: 'Chọn giờ báo, báo trước và nhắc sự kiện cá nhân',
+     alt: 'Màn hình Cài đặt: các công tắc nhắc nhở sự kiện, mùng 1 và ngày rằm, sự kiện cá nhân và giờ báo'},
+    {src: 'cai-dat-sao-luu.webp', label: 'Sao lưu', i: 'backup',
+     t: 'Xuất và nhập JSON, ICS, đồng bộ Google Calendar',
+     alt: 'Màn hình Cài đặt: xuất và nhập dữ liệu, đồng bộ Google Calendar và thông tin ứng dụng'}
+  ];
 
   componentDidMount() {
     let saved = null;
@@ -360,12 +408,40 @@ class Component extends DCLogic {
         el.style.transition = 'opacity .65s ease, transform .65s ease';
       }
     });
+    // Each gallery renders one shot at a time, so the rest are not in the DOM.
+    // Warm them once the page is idle; a tab switch then paints instantly.
+    const warm = () => [...this.landShots, ...this.proShots]
+      .forEach(sh => { const im = new Image(); im.src = 'assets/' + sh.src; });
+    if (window.requestIdleCallback) requestIdleCallback(warm, {timeout: 3000});
+    else setTimeout(warm, 1200);
+
     this._io = new IntersectionObserver(entries => entries.forEach(e => {
       if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'none'; this._io.unobserve(e.target); }
     }), {threshold: 0.12});
     els.forEach(el => this._io.observe(el));
   }
   componentWillUnmount() { if (this._io) this._io.disconnect(); }
+
+  // One tabbed gallery: a segmented control plus the shot it selects. Returns the
+  // flattened keys the template binds (<name>Tabs, <name>ShotSrc, …) so the markup
+  // never needs dotted paths on a top-level value. The active tab is flagged with
+  // aria-selected and painted from CSS — a bound inline style does not survive, the
+  // runtime hoists each sc-for item's first-render style into a generated class.
+  gallery(name, stateKey, shots) {
+    const active = this.state[stateKey] ?? 0;
+    const shot = shots[active] ?? shots[0];
+    return {
+      [name + 'Tabs']: shots.map((sh, i) => ({
+        label: sh.label,
+        selected: i === active ? 'true' : 'false',
+        select: () => this.setState({[stateKey]: i})
+      })),
+      [name + 'ShotSrc']: shot.src,
+      [name + 'ShotAlt']: shot.alt,
+      [name + 'ShotIcon']: shot.i,
+      [name + 'ShotCaption']: shot.t
+    };
+  }
 
   renderVals() {
     return {
@@ -391,12 +467,7 @@ class Component extends DCLogic {
         {i: 'celebration', t: 'Sự kiện & ngày lễ', d: 'Tết, Rằm tháng Giêng, Giỗ Tổ, Vu Lan… đếm ngược sẵn từng ngày để bạn không bao giờ bị động.'},
         {i: 'cloud_off', t: '100% offline & riêng tư', d: 'Không quảng cáo, không thu thập dữ liệu, không cần mạng. Mở là chạy, kể cả khi ở nước ngoài.'}
       ],
-      landscapeShots: [
-        {src: 'ngang-doi-ngay.webp', i: 'swap_vert', t: 'Đổi ngày — bánh xe và kết quả cạnh nhau', alt: 'Màn hình Đổi ngày khi xoay ngang: bánh xe chọn ngày bên trái, kết quả âm lịch bên phải'},
-        {src: 'ngang-gio.webp', i: 'schedule', t: 'Giờ — cả 12 giờ Can Chi trong một khung', alt: 'Màn hình Giờ khi xoay ngang: dải 12 giờ Can Chi và danh sách giờ chia ba cột'},
-        {src: 'ngang-su-kien.webp', i: 'celebration', t: 'Sự kiện — danh sách và chi tiết song song', alt: 'Màn hình Sự kiện khi xoay ngang: danh sách ngày lễ bên trái, chi tiết sự kiện bên phải'},
-        {src: 'ngang-cai-dat.webp', i: 'tune', t: 'Cài đặt — mục lục bên trái, nội dung bên phải', alt: 'Màn hình Cài đặt khi xoay ngang: danh mục cài đặt bên trái, tuỳ chọn giao diện bên phải'}
-      ],
+      ...this.gallery('land', 'landTab', this.landShots),
       proBenefits: [
         {i: 'cake', t: 'Sự kiện cá nhân', d: 'Giỗ, sinh nhật theo âm hoặc dương lịch — tự nhắc lại hằng năm, không phải nhập lại.'},
         {i: 'notifications_active', t: 'Nhắc nhở tuỳ chỉnh', d: 'Chọn giờ báo trong ngày và số ngày báo trước, thay vì mốc 7:00 mặc định.'},
@@ -405,13 +476,7 @@ class Component extends DCLogic {
         {i: 'backup', t: 'Sao lưu & xuất dữ liệu', d: 'Xuất sự kiện ra tệp JSON hoặc lịch ICS, nhập lại khi đổi máy.'},
         {i: 'event_repeat', t: 'Đồng bộ Google Calendar', d: 'Đưa sự kiện từ lịch trên máy vào tab Sự kiện để xem chung một chỗ.'}
       ],
-      proShots: [
-        {src: 'widget-man-hinh-chinh.webp', i: 'widgets', t: 'Widget ngay trên màn hình chính', alt: 'Màn hình chính điện thoại với tiện ích giờ hoàng đạo và tiện ích sự kiện sắp tới'},
-        {src: 'widget-chon.webp', i: 'dashboard_customize', t: 'Bốn kiểu tiện ích để chọn', alt: 'Màn hình Chọn tiện ích: bốn mẫu widget ngày âm lịch, giờ hoàng đạo và giờ tốt kế tiếp'},
-        {src: 'cai-dat-pro.webp', i: 'palette', t: 'Chủ đề màu & kiểu lưới lịch', alt: 'Màn hình Cài đặt: huy hiệu Lịch Việt Pro, năm kiểu lưới lịch và bảng 18 chủ đề màu'},
-        {src: 'cai-dat-nhac-nho.webp', i: 'notifications_active', t: 'Nhắc nhở và tiện ích', alt: 'Màn hình Cài đặt: các công tắc nhắc nhở sự kiện, mùng 1 và ngày rằm, sự kiện cá nhân và giờ báo'},
-        {src: 'cai-dat-sao-luu.webp', i: 'backup', t: 'Sao lưu, nhập dữ liệu, Lịch Google', alt: 'Màn hình Cài đặt: xuất và nhập dữ liệu, đồng bộ Google Calendar và thông tin ứng dụng'}
-      ],
+      ...this.gallery('pro', 'proTab', this.proShots),
       steps: [
         {n: '01', i: 'download', t: 'Tải và mở', d: 'Cài từ Google Play rồi mở — không cần tài khoản, không cần thiết lập gì thêm.'},
         {n: '02', i: 'today', t: 'Xem hôm nay', d: 'Ngày âm, Can Chi và giờ hoàng đạo của hôm nay hiện ngay trên màn hình đầu tiên.'},
